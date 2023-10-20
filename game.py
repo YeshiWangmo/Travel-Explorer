@@ -18,6 +18,7 @@ while running:
             running = False
 
     # Update game logic here
+    # More code here
 
     # Render graphics here
 
