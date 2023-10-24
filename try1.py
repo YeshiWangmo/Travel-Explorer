@@ -5,7 +5,7 @@ pygame.init()
 
 # Set up the game window
 screen = pygame.display.set_mode((960, 680))
-pygame.display.set_caption("Travel Explore")
+pygame.display.set_caption("Travel Explore1")
 
 # Set the background 
 background= pygame.image.load("cartoon-forest-background-pk4lm7s01x1t3ckt.jpg")
@@ -31,9 +31,9 @@ while running:
             elif event.key == pygame.K_DOWN:
                 player_y += velocity
 
-    player = pygame.image.load("10995.png")
+    player = pygame.image.load("still.png")
     player = player.convert_alpha()
-    player_size = (50, 80)
+    player_size = (100, 80)
     player = pygame.transform.scale(player, player_size)
     player_rect = player.get_rect(topleft=(player_x, player_y))
     screen.blit(player, player_rect)
