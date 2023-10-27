@@ -11,6 +11,17 @@ pygame.display.set_caption("Travel Explore1")
 background= pygame.image.load("cartoon-forest-background-pk4lm7s01x1t3ckt.jpg")
 screen.blit(background,(0,0))
 
+class player(pygame.sprite.Sprite):
+    def_int_(self, pos_x, pos_y)
+    super().init_()
+    self.sprite= []
+    self.sprite.append(pygame.image.load("still.png"))
+    self.sprite.append(pygame.image.load("left side.jpg"))
+    self.sprite.append(pygame.image.load("rifht side.jpg"))
+
+
+
+
 # Game loop
 running = True
 player_x = 100
@@ -38,7 +49,6 @@ while running:
     player_rect = player.get_rect(topleft=(player_x, player_y))
     screen.blit(player, player_rect)
     pygame.draw.rect(screen,(255,0,0),(150,650,200,30))
-    pygame.display.update()
-
+    pygame.display.update
 # Quit the game
 pygame.quit()
