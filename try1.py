@@ -15,7 +15,7 @@ background = pygame.image.load("forest.jpg")
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 
 # Insert this line to load the background sound
-pygame.mixer.music.load("best-adventure-ever-122726.mp3")  
+pygame.mixer.music.load("best-adventure-ever-122726.mp3")
 
 # Set the background sound to loop infinitely
 pygame.mixer.music.play(-1)
@@ -61,11 +61,21 @@ player_y = 350
 velocity = 80
 player_lives = 3  # Initial player lives
 score = 0  # Player's score
+game_started = False  # Define the game_started variable
 
 # Button
 start_button = pygame.image.load("start button.jpg")
 start_button = pygame.transform.scale(start_button, (150, 50))
 start_button_rect = start_button.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+
+def reset_game():
+    global player_x, player_y, player_lives, score, game_started
+    player_x = 150
+    player_y = 350
+    player_lives = 3
+    score = 0
+    game_started = True
+
 def reset_item_position(item):
     item["rect"].x = random.randint(0, WIDTH - 20)
     item["rect"].y = 0
@@ -73,8 +83,7 @@ def reset_item_position(item):
 # Game loop
 running = True
 while running:
-     
-      
+
     # Draw the start button
     if not game_started:
         screen.blit(start_button, start_button_rect)
@@ -122,12 +131,11 @@ while running:
     text = font.render("Final Score: " + str(score), 1, (255, 255, 255))
     screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 + text.get_height()))
 
-     # Check for game over
+    # Check for game over
     if player_lives <= 0:
         font = pygame.font.Font(None, 72)
         text = font.render("Game Over", 1, (255, 0, 0))
         screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
-
 
     # Update the display
     pygame.display.flip()
@@ -142,15 +150,14 @@ while running:
                 player_direction = "right"
             elif event.key == pygame.K_LEFT:
                 player_x -= velocity
-                player_direction="left"
+                player_direction = "left"
 
-
-                  # Check for events
-    
-        elif not game_started and event.type == pygame.MOUSEBUTTONDOWN:
-            if start_button_rect.collidepoint(event.pos):
-                game_started = True
-
+        # Add event handling for the start button click
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_pos = pygame.mouse.get_pos()
+            if start_button_rect.collidepoint(mouse_pos) and not game_started:
+                    reset_game()
+                    game_started = True
 
     # Quit Pygame if player lives are over
     if player_lives <= 0:
@@ -158,4 +165,3 @@ while running:
 
 # Quit Pygame
 pygame.quit()
-
