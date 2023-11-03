@@ -1,41 +1,135 @@
 import pygame
+import random
 
-# Initialize the game
+# Initialize Pygame
 pygame.init()
+# Set up some constants
+WIDTH, HEIGHT = 800, 600
 
 # Set up the game window
-screen = pygame.display.set_mode((960, 680))
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Travel Explore")
 
-# Set the background 
-background= pygame.image.load("cartoon-forest-background-pk4lm7s01x1t3ckt.jpg")
-screen.blit(background,(0,0))
+# Set the background
+background = pygame.image.load("forest.jpg")
+background = pygame.transform.scale(background, (WIDTH, HEIGHT))
+
+# Create the player
+player = pygame.image.load("boy.png")
+player_right = pygame.image.load("boy.png")
+player_left = pygame.image.load("boy left.png")
+player_direction = "left"
+
+player_rect = player.get_rect(topleft=(150, 400))
+
+# Create the things to catch
+Map = pygame.image.load("Map_thumbnail.png")
+tent = pygame.image.load("tent_thumbnail.png")
+bottle = pygame.image.load("bo.png")
+boom = pygame.image.load("boom.webp")
+
+# Scale the images size
+bottle_resized = pygame.transform.scale(bottle, (50, 80))
+map_resized = pygame.transform.scale(Map, (100, 120))
+tent_resized = pygame.transform.scale(tent, (100, 90))
+boom_resized = pygame.transform.scale(boom, (50, 50))
+
+boom_speed = 1.5
+
+items = [
+    {"image": bottle_resized, "rect": bottle_resized.get_rect(topleft=(random.randint(0, WIDTH - 20), 0)), "speed": 1.3},
+    {"image": map_resized, "rect": map_resized.get_rect(topright=(random.randint(0, WIDTH - 10), 0)), "speed": 1.5},
+    {"image": tent_resized, "rect": tent_resized.get_rect(topleft=(random.randint(0, WIDTH - 20), 0)), "speed": 1},
+]
+
+boom_item = {
+    "image": boom_resized,
+    "rect": boom_resized.get_rect(topleft=(random.randint(0, WIDTH - 20), 0)),
+    "speed": 1
+}
+items.append(boom_item)
+
+# Game variables
+player_x = 150
+player_y = 350
+velocity = 80
+player_lives = 3  # Initial player lives
+score = 0  # Player's score
+
+def reset_item_position(item):
+    item["rect"].x = random.randint(0, WIDTH - 20)
+    item["rect"].y = 0
 
 # Game loop
 running = True
-player_x = 100
-player_y = 500
-velocity = 5
-
 while running:
+    # Draw the background
+    screen.blit(background, (0, 0))
+
+    # Draw the player
+    if player_direction == "left":
+        screen.blit(player_left, player_rect)
+    else:
+        screen.blit(player_right, player_rect)
+
+    # Move the player
+    player_rect.x = player_x
+    player_rect.y = player_y
+
+    # Draw the items and move them down
+    for item in items:
+        # Draw the item
+        screen.blit(item["image"], item["rect"])
+
+        # Move the item down
+        item["rect"].y += item["speed"]
+
+        # If the item hits the bottom of the screen, reset its position
+        if item["rect"].y > HEIGHT:
+            reset_item_position(item)
+
+        # If the item hits the player, reset its position and update the score
+        if player_rect.colliderect(item["rect"]):
+            if item is not boom_item:
+                reset_item_position(item)
+                score += 1
+            else:
+                player_lives -= 1
+                reset_item_position(item)
+
+    # Display player lives
+    font = pygame.font.Font(None, 36)
+    text = font.render("Lives: " + str(player_lives), 1, (10, 10, 10))
+    screen.blit(text, (10, 10))
+
+     # Check for game over
+    if player_lives <= 0:
+        font = pygame.font.Font(None, 72)
+        text = font.render("Game Over", 1, (255, 0, 0))
+        screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
+
+        font = pygame.font.Font("red", 36)
+        text = font.render("Final Score: " + str(score), 1, (255, 255, 255))
+        screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 + text.get_height()))
+
+    # Update the display
+    pygame.display.flip()
+
+    # Handle events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
                 player_x += velocity
+                player_direction = "right"
             elif event.key == pygame.K_LEFT:
                 player_x -= velocity
-            
 
-    player = pygame.image.load("boy.png")
-    player = player.convert_alpha()
-    player_size = (250, 200)
-    player = pygame.transform.scale(player, player_size)
-    player_rect = player.get_rect(topleft=(player_x, player_y))
-    screen.blit(player, player_rect)
-    pygame.draw.rect(screen,(255,0,0),(150,650,200,30))
-    pygame.display.update()
+    # Quit Pygame if player lives are over
+    if player_lives <= 0:
+        running = False
 
-# Quit the game
+# Quit Pygame
 pygame.quit()
+
