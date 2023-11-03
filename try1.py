@@ -62,6 +62,10 @@ velocity = 80
 player_lives = 3  # Initial player lives
 score = 0  # Player's score
 
+# Button
+start_button = pygame.image.load("start button.jpg")
+start_button = pygame.transform.scale(start_button, (150, 50))
+start_button_rect = start_button.get_rect(center=(WIDTH // 2, HEIGHT // 2))
 def reset_item_position(item):
     item["rect"].x = random.randint(0, WIDTH - 20)
     item["rect"].y = 0
@@ -69,6 +73,12 @@ def reset_item_position(item):
 # Game loop
 running = True
 while running:
+     
+      
+    # Draw the start button
+    if not game_started:
+        screen.blit(start_button, start_button_rect)
+
     # Draw the background
     screen.blit(background, (0, 0))
 
@@ -133,6 +143,13 @@ while running:
             elif event.key == pygame.K_LEFT:
                 player_x -= velocity
                 player_direction="left"
+
+
+                  # Check for events
+    
+        elif not game_started and event.type == pygame.MOUSEBUTTONDOWN:
+            if start_button_rect.collidepoint(event.pos):
+                game_started = True
 
 
     # Quit Pygame if player lives are over
