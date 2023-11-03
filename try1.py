@@ -14,6 +14,12 @@ pygame.display.set_caption("Travel Explore")
 background = pygame.image.load("forest.jpg")
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 
+# Insert this line to load the background sound
+pygame.mixer.music.load("best-adventure-ever-122726.mp3")  
+
+# Set the background sound to loop infinitely
+pygame.mixer.music.play(-1)
+
 # Create the player
 player = pygame.image.load("boy.png")
 player_right = pygame.image.load("boy.png")
@@ -102,26 +108,19 @@ while running:
     text = font.render("Lives: " + str(player_lives), 1, (10, 10, 10))
     screen.blit(text, (10, 10))
 
+    font = pygame.font.Font(None, 36)
+    text = font.render("Final Score: " + str(score), 1, (255, 255, 255))
+    screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 + text.get_height()))
+
      # Check for game over
     if player_lives <= 0:
         font = pygame.font.Font(None, 72)
         text = font.render("Game Over", 1, (255, 0, 0))
         screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
-        # Delay for a few seconds
-        pygame.time.delay(3000) 
 
-        font = pygame.font.Font("red", 36)
-        text = font.render("Final Score: " + str(score), 1, (255, 255, 255))
-        screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 + text.get_height()))
-
-    
 
     # Update the display
     pygame.display.flip()
-
-     
-
-    
 
     # Handle events
     for event in pygame.event.get():
@@ -133,11 +132,12 @@ while running:
                 player_direction = "right"
             elif event.key == pygame.K_LEFT:
                 player_x -= velocity
+                player_direction="left"
+
 
     # Quit Pygame if player lives are over
     if player_lives <= 0:
-         
-         running = False
+        running = False
 
 # Quit Pygame
 pygame.quit()
