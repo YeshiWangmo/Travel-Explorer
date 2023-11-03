@@ -26,10 +26,7 @@ while running:
                 player_x += velocity
             elif event.key == pygame.K_LEFT:
                 player_x -= velocity
-            elif event.key == pygame.K_UP:
-                player_y -= velocity
-            elif event.key == pygame.K_DOWN:
-                player_y += velocity
+            
 
     player = pygame.image.load("boy.png")
     player = player.convert_alpha()
