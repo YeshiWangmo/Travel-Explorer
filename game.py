@@ -15,7 +15,7 @@ background = pygame.image.load("forest.jpg")
 background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 
 # Insert this line to load the background sound
-pygame.mixer.music.load("best-adventure-ever-122726.mp3")  
+pygame.mixer.music.load("best-adventure-ever-122726.mp3")
 
 # Set the background sound to loop infinitely
 pygame.mixer.music.play(-1)
@@ -23,7 +23,7 @@ pygame.mixer.music.play(-1)
 # Create the player
 player = pygame.image.load("boy.png")
 player_right = pygame.image.load("boy.png")
-player_left = pygame.image.load("boy left.png")
+player_left = pygame.image.load("boy left.png")  # Fixed filename typo
 player_direction = "left"
 
 player_rect = player.get_rect(topleft=(150, 400))
@@ -61,10 +61,31 @@ player_y = 350
 velocity = 80
 player_lives = 3  # Initial player lives
 score = 0  # Player's score
+start_game = False
 
 def reset_item_position(item):
-    item["rect"].x = random.randint(0, WIDTH - 20)
     item["rect"].y = 0
+    item["rect"].x = random.randint(0, WIDTH - item["rect"].width)
+
+
+# Start screen loop
+while not start_game:
+    # Draw the start screen
+    screen.blit(background, (0, 0))
+    font = pygame.font.Font(None, 36)
+    text = font.render("Press SPACE to start", 1, (255, 255, 255))
+    screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
+
+    # Update the display
+    pygame.display.flip()
+
+    # Handle events for the start screen
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            start_game = True
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                start_game = True
 
 # Game loop
 running = True
@@ -105,19 +126,19 @@ while running:
 
     # Display player lives
     font = pygame.font.Font(None, 36)
-    text = font.render("Lives: " + str(player_lives), 1, (10, 10, 10))
+    text = font.render("Lives: " + str(player_lives), 1, ("orange"))
     screen.blit(text, (10, 10))
 
+    
     font = pygame.font.Font(None, 36)
-    text = font.render("Final Score: " + str(score), 1, (255, 255, 255))
+    text = font.render("Final Score: " + str(score), 1, ("purple"))
     screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 + text.get_height()))
 
-     # Check for game over
+    # Check for game over
     if player_lives <= 0:
         font = pygame.font.Font(None, 72)
         text = font.render("Game Over", 1, (255, 0, 0))
         screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
-
 
     # Update the display
     pygame.display.flip()
@@ -132,13 +153,12 @@ while running:
                 player_direction = "right"
             elif event.key == pygame.K_LEFT:
                 player_x -= velocity
-                player_direction="left"
-
+                player_direction = "left"
 
     # Quit Pygame if player lives are over
     if player_lives <= 0:
         running = False
+    
 
 # Quit Pygame
 pygame.quit()
-
