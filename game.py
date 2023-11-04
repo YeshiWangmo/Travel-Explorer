@@ -54,6 +54,8 @@ boom_item = {
     "speed": 1
 }
 items.append(boom_item)
+start_button= pygame.image.load("start button.jpg")
+start_button_resized = pygame.transform.scale(start_button, (800, 650))
 
 # Game variables
 player_x = 150
@@ -71,10 +73,12 @@ def reset_item_position(item):
 # Start screen loop
 while not start_game:
     # Draw the start screen
-    screen.blit(background, (0, 0))
+    screen.blit(start_button_resized, (0, 0))
     font = pygame.font.Font(None, 36)
-    text = font.render("Press SPACE to start", 1, (255, 255, 255))
-    screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
+    text = font.render("Welcome to collect thing for your travel experience", 1, ("black"))
+    text_1 = font.render(" Press SPACE to start", 1, ("magenta"))
+    screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 3 - text.get_height() // 19))
+    screen.blit(text_1, (WIDTH // 3- text.get_width() // 9, HEIGHT // 2- text.get_height() // 15))
 
     # Update the display
     pygame.display.flip()
@@ -139,6 +143,9 @@ while running:
         font = pygame.font.Font(None, 72)
         text = font.render("Game Over", 1, (255, 0, 0))
         screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
+        pygame.display.flip()
+        pygame.time.delay(200)
+        running= False
 
     # Update the display
     pygame.display.flip()
