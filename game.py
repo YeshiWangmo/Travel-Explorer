@@ -169,3 +169,50 @@ while running:
 
 # Quit Pygame
 pygame.quit()
+
+
+
+
+# reference
+# https://youtu.be/Ongc4EVqRjo?feature=shared
+# https://youtu.be/_jmGqrC-RQ8?feature=shared
+# https://youtu.be/7QX8y6R9Hi8?feature=shared 
+# ChatGPT, personal communication, October, 2023
+
+
+import unittest
+import pygame
+import My_game_module
+from game import Game # replace with the name of your game module
+
+class TestGame(unittest.TestCase):
+   def setUp(self):
+       pygame.init()
+       self.game = Game() # replace with your actual game class
+
+   def tearDown(self):
+       pygame.quit()
+
+   def test_player_movement(self):
+       initial_position = self.game.player_rect.topleft
+       self.game.move_player(pygame.K_RIGHT)
+       final_position = self.game.player_rect.topleft
+       self.assertNotEqual(initial_position, final_position)
+
+   def test_collision_detection(self):
+       # This is a simplified test. In a real test, you'd need to create an item
+       # and move it to collide with the player.
+       initial_score = self.game.score
+       self.game.player_rect.colliderect(self.game.items[0]["rect"])
+       final_score = self.game.score
+       self.assertNotEqual(initial_score, final_score)
+
+   def test_game_over(self):
+       initial_lives = self.game.player_lives
+       self.game.player_lives = 0
+       game_over = self.game.is_game_over()
+       self.assertTrue(game_over)
+
+if __name__ == '__main__':
+   unittest.main()
+
