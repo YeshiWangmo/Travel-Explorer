@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
 import pygame
-from game import initialize_game, load_images, create_player, create_items, reset_item_position, draw_start_screen, game_loop, WIDTH, HEIGHT,screen, draw_game_over_screen, background, player_direction,player_rect, player_x,player_y, items
+from game import *
 
 
 class TestGame(unittest.TestCase):
